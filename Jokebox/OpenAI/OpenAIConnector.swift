@@ -64,11 +64,12 @@ public class OpenAIConnector {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("Bearer \(self.openAIKey)", forHTTPHeaderField: "Authorization")
         let httpBody: [String: Any] = [
-            "model": "gpt-3.5-turbo",
+//            "model": "gpt-3.5-turbo",
+            "model": "gpt-4",
             
-            "messages": [["role": "system", "content": "You are a funny and kid friendly comedian that always provides jokes that are relevant to the user's situtation."], ["role": "user", "content": prompt]],
+            "messages": [["role": "system", "content": "You are a funny comedian that always provides jokes that are relevant to the given situtation."], ["role": "user", "content": prompt]],
             /// Adjust this to control the maxiumum amount of tokens OpenAI can respond with.
-            "max_tokens" : 100,
+            "max_tokens" : 175,
             /// You can add more parameters below, but make sure they match the ones in the OpenAI API Reference.
             "temperature" : 0.9,
             

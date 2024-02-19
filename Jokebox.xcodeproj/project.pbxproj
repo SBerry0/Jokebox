@@ -17,6 +17,7 @@
 		9C47E2312A31990B00D83AEB /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C47E2302A31990B00D83AEB /* Color.swift */; };
 		9C47E2382A3693DA00D83AEB /* OpenAIConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C47E2372A3693DA00D83AEB /* OpenAIConnector.swift */; };
 		9C47E23A2A3694B200D83AEB /* OpenAIResponseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C47E2392A3694B200D83AEB /* OpenAIResponseHandler.swift */; };
+		9C7973082B681D1000555E3E /* Staatliches-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9C7973072B681D1000555E3E /* Staatliches-Regular.ttf */; };
 		9C90E7C72A41D60500AEC822 /* Orbit-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9C90E7C62A41D60400AEC822 /* Orbit-Regular.ttf */; };
 		9C90E7C82A41D60500AEC822 /* Orbit-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9C90E7C62A41D60400AEC822 /* Orbit-Regular.ttf */; };
 		9C90E7C92A41D60500AEC822 /* Orbit-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9C90E7C62A41D60400AEC822 /* Orbit-Regular.ttf */; };
@@ -59,6 +60,7 @@
 		9C47E2372A3693DA00D83AEB /* OpenAIConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIConnector.swift; sourceTree = "<group>"; };
 		9C47E2392A3694B200D83AEB /* OpenAIResponseHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIResponseHandler.swift; sourceTree = "<group>"; };
 		9C47E23D2A3BFF3000D83AEB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		9C7973072B681D1000555E3E /* Staatliches-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Staatliches-Regular.ttf"; sourceTree = "<group>"; };
 		9C90E7C62A41D60400AEC822 /* Orbit-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Orbit-Regular.ttf"; sourceTree = "<group>"; };
 		9CCDFB6B2A9A8B190074AD08 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		9CE185592A4560DA0056F5D7 /* Press-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Press-Regular.ttf"; sourceTree = "<group>"; };
@@ -150,6 +152,16 @@
 			path = JokesterUITests;
 			sourceTree = "<group>";
 		};
+		9C7973092B681D2800555E3E /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				9CE185592A4560DA0056F5D7 /* Press-Regular.ttf */,
+				9C90E7C62A41D60400AEC822 /* Orbit-Regular.ttf */,
+				9C7973072B681D1000555E3E /* Staatliches-Regular.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		9CE1854F2A431BB20056F5D7 /* OpenAI */ = {
 			isa = PBXGroup;
 			children = (
@@ -162,9 +174,8 @@
 		9CE185502A431BCA0056F5D7 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				9C7973092B681D2800555E3E /* Fonts */,
 				9C47E2302A31990B00D83AEB /* Color.swift */,
-				9C90E7C62A41D60400AEC822 /* Orbit-Regular.ttf */,
-				9CE185592A4560DA0056F5D7 /* Press-Regular.ttf */,
 				9C47E20A2A3196B700D83AEB /* Assets.xcassets */,
 			);
 			path = Assets;
@@ -236,7 +247,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					9C47E2022A3196B600D83AEB = {
 						CreatedOnToolsVersion = 14.3.1;
@@ -280,6 +291,7 @@
 			files = (
 				9C90E7C72A41D60500AEC822 /* Orbit-Regular.ttf in Resources */,
 				9C47E20E2A3196B700D83AEB /* Preview Assets.xcassets in Resources */,
+				9C7973082B681D1000555E3E /* Staatliches-Regular.ttf in Resources */,
 				9C47E20B2A3196B700D83AEB /* Assets.xcassets in Resources */,
 				9CE1855A2A4560DA0056F5D7 /* Press-Regular.ttf in Resources */,
 			);
@@ -389,6 +401,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -449,6 +462,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -473,7 +487,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_ASSET_PATHS = "\"Jokebox/Preview Content\"";
 				DEVELOPMENT_TEAM = 475W77LFJ2;
 				ENABLE_PREVIEWS = YES;
@@ -492,7 +506,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.SohumBerry.Jokebox;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -510,7 +524,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_ASSET_PATHS = "\"Jokebox/Preview Content\"";
 				DEVELOPMENT_TEAM = 475W77LFJ2;
 				ENABLE_PREVIEWS = YES;
@@ -529,7 +543,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.SohumBerry.Jokebox;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
