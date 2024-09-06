@@ -7,8 +7,6 @@
 
 import Foundation
 
-
-
 public func containsSwearWord(text: String) -> Bool {
     let badwords = Constants.PottyWords.components(separatedBy: ",")
     let words_str = text.lowercased()

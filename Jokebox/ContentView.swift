@@ -40,38 +40,51 @@ struct ContentView: View {
     @State var showLike: Bool = false
     @State var showDislike: Bool = false
     
+    func fetch() {
+        if let data = UserDefaults.standard.data(forKey: "SavedData") {
+            if let decoded = try? JSONDecoder().decode([FavoriteItem].self, from: data) {
+                print("fetching...")
+                favorites = decoded
+                return
+            }
+        }
+        favorites = []
+    }
+    
+    func save() {
+        if let encoded = try? JSONEncoder().encode(favorites) {
+            UserDefaults.standard.set(encoded, forKey: "SavedData")
+        }
+    }
+    
     var body: some View {
         ZStack {
             Group {
-                
                 TabView(selection: $selector) {
                     Group {
                         SmileView(joke: $response, favorited: $favorited, item: $item, showLike: $showLike, showDislike: $showDislike, favorites: $favorites)
                             .tabItem {
                                 Label("Jokes", systemImage: "face.smiling")
-                                    .padding(.top, 5)
+//                                    .padding(.top, 10)
                             }
                             .tag(0)
-                            .onChange(of: favorited) { _ in
-                                if favorited == true {
-                                    favorites.insert(item, at: 0)
-                                }
-                                else {
-                                    favorites.removeAll { value in
-                                        return value.id == item.id
-                                    }
-                                }
+                            .onAppear() {
+                                fetch()
                             }
+                            
                         FavoritesView(favorites: $favorites)
                             .tabItem {
                                 Label("Favorites", systemImage: "heart")
-                                    .padding(.top, 5)
+//                                    .padding(.top, 10)
                             }
                             .tag(1)
                     }
                     .toolbarBackground(.visible, for: .tabBar)
                     .toolbarBackground(Color.theme.black, for: .tabBar)
-                    
+                }
+                .onChange(of:   favorites.count) { _ in
+                    save()
+                    print("saving...")
                 }
             }
             .ignoresSafeArea(.keyboard)
@@ -100,9 +113,11 @@ struct ContentView: View {
         }
     }
 }
-//MARK: Favorites
-struct FavoriteItem: Identifiable {
-    let id = UUID()
+
+
+////MARK: Favorites
+struct FavoriteItem: Identifiable, Codable {
+    var id = UUID()
     let prompt: String
     var joke: String
     let jokeType: String
@@ -129,6 +144,7 @@ struct FavoriteItemView: View {
 }
 // MARK: FavoritesView
 struct FavoritesView: View {
+//    @Binding var favorites: [FavoriteItem]
     @Binding var favorites: [FavoriteItem]
     @State var stillFav: Bool = true
     @State var showHelp: Bool = false
@@ -169,10 +185,13 @@ struct FavoritesView: View {
                         HStack {
                             Text("Powered by OpenAI")
                                 .padding(.leading, 20)
-                            
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.7)
                             Spacer()
                             Text("Created by Sohum Berry")
                                 .padding(.trailing, 20)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.7)
                         }
                         .padding(.bottom, 20)
                         .foregroundColor(Color.theme.gray)
@@ -185,7 +204,7 @@ struct FavoritesView: View {
                     .ignoresSafeArea(.keyboard, edges: .bottom)
                 } else {
                     ScrollView(showsIndicators: true) {
-                        VStack (spacing: 15) {
+                        VStack (spacing: 10) {
                             ForEach(favorites) { item in
                                 FavoriteItemView(prompt: item.prompt, joke: item.joke)
                                     .overlay(alignment: .topTrailing) {
@@ -200,8 +219,10 @@ struct FavoritesView: View {
                                                         return value.id == item.id
                                                     }
                                                 }
+                                                HapticManager.instance.impact(style: .light)
                                             }
                                     }
+                                    .padding(.bottom, 5)
                             }
                         }
                     }
@@ -209,8 +230,9 @@ struct FavoritesView: View {
             }
             VStack {
                 HStack {
+                    Spacer()
                     Image(systemName: "questionmark.circle")
-                        .padding(.leading, 20)
+                        .padding(.trailing, 20)
                         .foregroundColor(Color.theme.fg)
                         .font(.system(size: 45))
                         .onTapGesture {
@@ -218,7 +240,6 @@ struct FavoritesView: View {
                                 showHelp = true
                             }
                         }
-                    Spacer()
                 }
                 Spacer()
                 VStack(spacing: 0) {
@@ -271,8 +292,8 @@ struct SmileView: View {
             Color.theme.bg
                 .ignoresSafeArea()
             if generated {
-                LinearGradient(stops: ([.init(color: Color.theme.gray, location: 0),
-                                        .init(color: Color.theme.bg, location: 0.07)]), startPoint: .leading, endPoint: .trailing)
+                LinearGradient(stops: ([.init(color: Color.theme.light_gray, location: 0),
+                                        .init(color: Color.theme.bg, location: 0.056)]), startPoint: .leading, endPoint: .trailing)
                                     .edgesIgnoringSafeArea(.all)
             }
             VStack {
@@ -303,13 +324,6 @@ struct SmileView: View {
                                                 }
                                             }
                                         })
-//                            .onAppear() {
-//                                if response.prefix(upTo: response.index(response.startIndex, offsetBy: 6)) == "Uh oh!" {
-//                                    print("has uh oh!")
-//                                    joke = String(response.dropFirst(65))
-//                                }
-//                                item = FavoriteItem(prompt: prompt, joke: joke, jokeType: jokeType)
-//                            }
                     }
                     // MARK: Input View
                     else {
@@ -350,10 +364,13 @@ struct SmileView: View {
                     HStack {
                         Text("Powered by OpenAI")
                             .padding(.leading, 20)
-                        
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
                         Spacer()
                         Text("Created by Sohum Berry")
                             .padding(.trailing, 20)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
                     }
                     .padding(.bottom, 20)
                     .foregroundColor(Color.theme.gray)
@@ -487,10 +504,7 @@ struct InputView: View {
                             }
                     }
                 }
-//                        .frame(minWidth: geometry.size.width)
-//                        .frame(width: geometry.size.width, height: geometry.size.height)
             }
-//                    .frame(width: geometry.size.width, height: 42)
             .shadow(color: Color.darkShadow, radius: 5, x: 2, y: 2)
             .shadow(color: Color.lightShadow, radius: 3, x: -2, y: -2)
             .padding(.bottom, 20)
@@ -509,46 +523,51 @@ struct InputView: View {
             case .idle:
                 ButtonView(text: "Generate Joke", bgcolor: Color.theme.black, fgcolor: Color.theme.fg, height: 90)
                     .onTapGesture {
-                        if containsSwearWord(text: situation) {
-                            print("Thats a potty word")
-                            withAnimation {
-                                currentButtonState = .badword
+                        if situation != "" {
+                            if containsSwearWord(text: situation) {
+                                print("Thats a potty word")
+                                withAnimation {
+                                    currentButtonState = .badword
+                                }
+                                HapticManager.instance.notification(type: .error)
                             }
-                            HapticManager.instance.notification(type: .error)
-                        }
-                        else {
-                            // If generated is false AND the text view isn't empty....
-                            if !generated && situation != "" {
-                                currentButtonState = .loading
-                                prompt = situation
-                                jokeTypeSend = jokeType.text
-                                // Create the prompt based on the situation and the type of joke
-                                let prompt_string = situation + ". Give me a " + jokeType.request + " specifically for this situation. Take your time and remember to breath. I'll tip you if you make me laugh. Keep it short and sweet."
-                                Task {
-                                    HapticManager.instance.notification(type: .success)
-                                    // Delay the function call for a fraction of a second so the screen can update to loading before generating
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-                                        // Set generated to true and generate the response from the OpenAI Connector with the prompt, reutrning a random hardcoded joke if null is recieved
-                                        response = connector.processPrompt(prompt: prompt_string) ?? "Uh oh! Something went wrong. You'll have to work with this one:\n\n" + Constants.BackupJokes.randomElement()!
-                                        if response == "nil" {
-                                            response = "Uh oh! Something went wrong. You'll have to work with this one:\n\n" + Constants.BackupJokes.randomElement()!
-                                        }
-                                        // Content filtering
-                                        if containsSwearWord(text: response) {
-                                            response = "Uh oh! This joke had some potty words. You'll have to do with this one:\n\n" + Constants.BackupJokes.randomElement()!
-                                        }
-                                        withAnimation {
-                                            generated = true
+                            else {
+                                // If generated is false AND the text view isn't empty....
+                                if !generated && situation != "" {
+                                    currentButtonState = .loading
+                                    prompt = situation
+                                    jokeTypeSend = jokeType.text
+                                    // Create the prompt based on the situation and the type of joke
+                                    var prompt_string = situation + ". Give me a " + jokeType.request + " specifically for this situation. Take your time and remember to breathe. I'll tip you if you make me laugh. Keep it short and sweet, less than 30 words."
+                                    Task {
+                                        HapticManager.instance.notification(type: .success)
+                                        // Delay the function call for a fraction of a second so the screen can update to loading before generating
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                                            // Set generated to true and generate the response from the OpenAI Connector with the prompt, reutrning a random hardcoded joke if null is recieved
+                                            if prompt_string.suffix(1) == " " {
+                                                prompt_string = String(prompt_string.dropLast())
+                                            }
+                                            response = connector.processPrompt(prompt: prompt_string) ?? "Uh oh! Something went wrong. You'll have to work with this one:\n\n" + Constants.BackupJokes.randomElement()!
+                                            if response == "nil" {
+                                                response = "Uh oh! Something went wrong. You'll have to work with this one:\n\n" + Constants.BackupJokes.randomElement()!
+                                            }
+                                            // Content filtering
+                                            if containsSwearWord(text: response) {
+                                                response = "Uh oh! This joke had some potty words. You'll have to do with this one:\n\n" + Constants.BackupJokes.randomElement()!
+                                            }
+                                            withAnimation {
+                                                generated = true
+                                            }
                                         }
                                     }
                                 }
                             }
-                            else {
-                                withAnimation {
-                                    currentButtonState = .empty
-                                }
-                                HapticManager.instance.notification(type: .error)
+                        }
+                        else {
+                            withAnimation {
+                                currentButtonState = .empty
                             }
+                            HapticManager.instance.notification(type: .error)
                         }
                     }
             case .loading:
@@ -661,7 +680,7 @@ struct JokeView: View {
                 
                 HStack(spacing: 15) {
                     Spacer()
-                    ShareLink(item: joke, preview: SharePreview(prompt, image: "AppIcon"))
+                    ShareLink(item: "https://apps.apple.com/us/app/jokebox/id6455461445\"" + (reloaded ? loading_joke: full_joke) + "\"\n-Jokebox", preview: SharePreview(prompt, image: "AppIcon"))
                         .labelStyle(.iconOnly)
                         .padding(.bottom, screenHeight * 0.08)
                         .foregroundColor(Color.theme.black)
@@ -675,7 +694,7 @@ struct JokeView: View {
                                 if prompt != "" {
                                     reload_count += 1
                                     showNotification = reload_count >= 4
-                                    if reload_count < 4 {
+                                    if reload_count < 3 {
                                         HapticManager.instance.notification(type: .success)
                                         buttonState = .loading
                                         
@@ -699,14 +718,13 @@ struct JokeView: View {
                                             }
                                         }
                                     }
-                                    // TODO: figure out why this don't work
                                     else {
                                         withAnimation() {
                                             buttonState = .limit
                                         }
                                         
                                     }
-//                                    }
+                                    favorited = false
                                 }
                             }
                     case .limit:
@@ -721,14 +739,14 @@ struct JokeView: View {
                         .padding(.bottom, screenHeight * 0.08)
                         .foregroundColor(Color.theme.black)
                         .onTapGesture {
-                            
                             if favorited == false {
                                 HapticManager.instance.notification(type: .success)
                                 if joke.prefix(upTo: joke.index(joke.startIndex, offsetBy: 6)) == "Uh oh!" {
                                     joke = String(joke.dropFirst(65))
                                 }
                                 item = FavoriteItem(prompt: prompt, joke: reloaded ? loading_joke : joke, jokeType: jokeType)
-                                favorites.append(item)
+                                favorites.insert(item, at: 0)
+                                
                                 withAnimation {
                                     favorited = true
                                     showLike = true
@@ -760,18 +778,6 @@ struct JokeView: View {
             .onAppear() {
                 full_joke = joke
             }
-            if showNotification {
-                VStack {
-                    Spacer()
-                    notification(message: "You reached the regeneration limit", size: 15)
-                        .padding(.bottom, -7)
-                    let _ = Timer.scheduledTimer(withTimeInterval: 1.3, repeats: false) { (timer) in
-                        withAnimation {
-                            showNotification = false
-                        }
-                    }
-                }
-            }
         }
     }
 }
@@ -784,11 +790,9 @@ struct notification: View {
             RoundedRectangle(cornerRadius: 12)
                 .foregroundColor(Color.theme.black)
                 .frame(width: screenWidth, height: 55)
-//            Text(isLiking ? "Joke has been added to favorites" : "Joke has been removed from favorites")
             Text(message)
                 .foregroundColor(Color.theme.fg)
                 .font(Font.custom("Orbit-Regular", size: size))
-//                .font(Font.custom("Orbit-Regular", size: isLiking ? 17 : 15))
         }
     }
 }

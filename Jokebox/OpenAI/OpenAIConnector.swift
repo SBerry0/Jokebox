@@ -47,14 +47,7 @@ public class OpenAIConnector {
     
     // Function to represent the request to the server, doesn't actually send it
     public func processPrompt(prompt: String) -> Optional<String> {
-//        let logit_bias = [
-//            37696:-50,
-//            22037:-50,
-//            47114:-50,
-//            1416:-50,
-//            533:-50,
-//            19437:-50
-//        ]
+
         //cURL request
         var request = URLRequest(url: self.openAIURL!)
 //        var messages: [[[String : String]]]
@@ -73,10 +66,7 @@ public class OpenAIConnector {
             /// You can add more parameters below, but make sure they match the ones in the OpenAI API Reference.
             "temperature" : 0.9,
             
-//            "logit_bias" : [37696:-50, 22037:-50, 47114:-50, 1416:-50, 533:-50, 19437:-50]
-//            "logit_bias" : logit_bias.mapValues({ Int in
-//                return Int
-//            })
+//            "response_format" : ["type" : "json_object"],
         ]
         
         var httpBodyJson: Data
@@ -93,31 +83,9 @@ public class OpenAIConnector {
             let jsonStr = String(data: requestData, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))!
             print(jsonStr)
             let responseHandler = OpenAIResponseHandler()
-//            guard let text = responseHandler.decodeJson(jsonString: jsonStr)?.choices[0].message["content"] else { return nil }
-//            let formatted_text = removeSpecialCharsFromString(text: text).lowercased()
-//            let text_array = formatted_text.components(separatedBy: .whitespacesAndNewlines)
-//            let formatted_prompt = removeSpecialCharsFromString(text: prompt).lowercased()
-//            var joke = ""
-//            let prompt_array = formatted_prompt.components(separatedBy: .whitespacesAndNewlines)
             
-//            if formatted_prompt.contains("atom") {
-//                if !formatted_text.contains("atom") {
-//                    return responseHandler.decodeJson(jsonString: self.processPrompt(prompt: "\(prompt) Make sure it is not about an atom") ?? "nil")?.choices[0].message["content"]
-//                }
-//            }
-//            if formatted_prompt.contains("scarecrow") {
-//                if !formatted_text.contains("scarecrow") {
-//                    return responseHandler.decodeJson(jsonString: self.processPrompt(prompt: "\(prompt) Make sure it is not about a scarecrow") ?? "nil")?.choices[0].message["content"]
-//                }
-//            }
-//            if text.prefix(upTo: text.index(text.startIndex, offsetBy: 4)) == "Sure" {
-//                print(text)
-//                print("Has sure")
-//                joke = String(text.split(separator: ":")[1].dropFirst())
-//            }
+            return responseHandler.decodeJson(jsonString: jsonStr)?.choices.first?.message.content
             
-            return responseHandler.decodeJson(jsonString: jsonStr)?.choices[0].message["content"]
-//            return joke
         }
         
         return nil

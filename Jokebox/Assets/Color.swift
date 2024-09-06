@@ -24,4 +24,5 @@ struct ColorTheme {
     let black = Color("black")
     let gray = Color("gray")
     let fg_dull = Color("fg_dull")
+    let light_gray = Color("light_gray")
 }
