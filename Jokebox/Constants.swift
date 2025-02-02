@@ -8,8 +8,6 @@
 import Foundation
 
 enum Constants {
-    // Private key for GPt-4 access
-    static let OpenAIAPIKey = "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"
     // Hard coded backup jokes in case the generation fails
     static let BackupJokes: [String] = [
         "What does a tick and the Eiffel Tower have in common?\n\nThey're both Paris sites.",
